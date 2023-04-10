@@ -16,7 +16,6 @@ const Home = () => {
 	const debouncedValue = useDebounce(citySearchText, 1000);
 	const [loading, setLoading] = useState(false);
 	const Card = ({ item }) => {
-		console.log({ userLocationWeather });
 		if (!item) return <></>;
 		const {
 			name,
