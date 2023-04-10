@@ -20,6 +20,5 @@ export const getWeatherByGeoLocation = async () => {
 		.get("http://ipinfo.io?token=2555f44fc54af9")
 		.then((res) => getWeatherData(res.data.city).then((res) => (result = res)))
 		.catch((err) => console.log(err));
-	console.log(result);
 	return result;
 };
