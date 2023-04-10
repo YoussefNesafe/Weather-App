@@ -1,17 +1,71 @@
 import useDebounce from "@/utils/useDebounce";
-import { getWeatherData } from "@/utils/weather-api";
+import { getWeatherByGeoLocation, getWeatherData } from "@/utils/weather-api";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { FaSpinner } from "react-icons/fa";
 import Weather3 from "/public/assets/weather-3-min.jpg";
-
+import { getSysTime } from "@/utils/timeUtils";
+import { RiWindyLine } from "react-icons/ri";
+import { WiHumidity, WiWindDeg } from "react-icons/wi";
 const Home = () => {
 	const [citySearchText, setCitySearchText] = useState("");
 	const [weather, setWeather] = useState({});
+	const [userLocationWeather, setUserLocationWeather] = useState({});
 	const debouncedValue = useDebounce(citySearchText, 1000);
 	const [loading, setLoading] = useState(false);
+	const Card = ({ item }) => {
+		console.log({ userLocationWeather });
+		if (!item) return <></>;
+		const {
+			name,
+			main: { humidity, temp },
+			wind: { deg, speed },
+			weather: [{ icon, main }],
+		} = item;
+		return (
+			<div className="card-container">
+				<div className="card">
+					<div className="card-header">
+						<p>{name}</p>
+						<p>Time: {getSysTime()}</p>
+					</div>
+					<div className="card-body">
+						<p className="temp">{temp.toFixed(0)}&#176;</p>
+						<p className="weatherStatus">{main}</p>
+					</div>
+					<div className="card-footer">
+						<div className="details">
+							<div className="info">
+								<RiWindyLine size={20} />
+								<span>{speed} km/h</span>
+							</div>
+							<div className="info">
+								<WiWindDeg size={20} />
+								<span>{humidity}%</span>
+							</div>
+							<div className="info">
+								<WiHumidity size={20} />
+								<span>{deg} deg</span>
+							</div>
+						</div>
+						<div className="card-icon">
+							<Image
+								src={`http://openWeathermap.org/img/wn/${icon}@2x.png`}
+								alt="icon"
+								width={100}
+								height={100}
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	};
+	useEffect(() => {
+		getWeatherByGeoLocation().then((res) => setUserLocationWeather(res));
+	}, []);
 	useEffect(() => {
 		if (debouncedValue) {
 			setLoading(true);
@@ -41,9 +95,9 @@ const Home = () => {
 					<div className="container">
 						<div className="searchContainer">
 							{loading ? (
-								<FaSpinner className="spinner icon" />
+								<FaSpinner className="spinner icon" color="#FFF" />
 							) : (
-								<BsSearch className="icon" />
+								<BsSearch className="icon" color="#FFF" />
 							)}
 							<input
 								type="text"
@@ -52,6 +106,10 @@ const Home = () => {
 								onChange={(e) => setCitySearchText(e.target.value)}
 								className="searchInput"
 							/>
+						</div>
+						<div className="cards-row">
+							<Card item={userLocationWeather?.data} />
+							{weather ? <Card item={weather?.data} /> : <></>}
 						</div>
 					</div>
 				</div>

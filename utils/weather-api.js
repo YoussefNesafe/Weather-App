@@ -7,10 +7,19 @@ const Axios = axios.create({
 export const getWeatherData = async ({ city = "dubai" }) => {
 	let error = undefined;
 	const res = await Axios.get("/weather", {
-		params: { q: city, appid: process.env.NEXT_PUBLIC_WEATHER_KEY },
+		params: { q: city, appid: process.env.NEXT_PUBLIC_WEATHER_KEY, units: "metric" },
 	}).catch((err) => (error = err));
 	return {
 		data: res?.data,
 		error: error?.response?.data?.message,
 	};
+};
+export const getWeatherByGeoLocation = async () => {
+	let result = {};
+	await axios
+		.get("http://ipinfo.io?token=2555f44fc54af9")
+		.then((res) => getWeatherData(res.data.city).then((res) => (result = res)))
+		.catch((err) => console.log(err));
+	console.log(result);
+	return result;
 };
