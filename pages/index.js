@@ -51,7 +51,7 @@ const Home = () => {
 						</div>
 						<div className="card-icon">
 							<Image
-								src={`http://openWeathermap.org/img/wn/${icon}@2x.png`}
+								src={`https://openWeathermap.org/img/wn/${icon}@2x.png`}
 								alt="icon"
 								width={100}
 								height={100}
