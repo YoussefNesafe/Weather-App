@@ -17,7 +17,7 @@ export const getWeatherData = async ({ city = "dubai" }) => {
 export const getWeatherByGeoLocation = async () => {
 	let result = {};
 	await axios
-		.get("http://ipinfo.io?token=2555f44fc54af9")
+		.get("https://ipinfo.io?token=2555f44fc54af9")
 		.then((res) => getWeatherData(res.data.city).then((res) => (result = res)))
 		.catch((err) => console.log(err));
 	return result;
