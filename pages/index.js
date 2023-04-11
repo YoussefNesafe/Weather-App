@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import useDebounce from "@/utils/useDebounce";
 import { getWeatherByGeoLocation, getWeatherData } from "@/utils/weather-api";
 import Head from "next/head";
@@ -9,12 +10,14 @@ import Weather3 from "/public/assets/weather-3-min.jpg";
 import { getSysTime } from "@/utils/timeUtils";
 import { RiWindyLine } from "react-icons/ri";
 import { WiHumidity, WiWindDeg } from "react-icons/wi";
+import Toast from "@/utils/Toast";
 const Home = () => {
 	const [citySearchText, setCitySearchText] = useState("");
 	const [weather, setWeather] = useState({});
 	const [userLocationWeather, setUserLocationWeather] = useState({});
 	const debouncedValue = useDebounce(citySearchText, 1000);
 	const [loading, setLoading] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
 	const Card = ({ item }) => {
 		if (!item) return <></>;
 		const {
@@ -50,7 +53,7 @@ const Home = () => {
 							</div>
 						</div>
 						<div className="card-icon">
-							<Image
+							<img
 								src={`https://openWeathermap.org/img/wn/${icon}@2x.png`}
 								alt="icon"
 								width={100}
@@ -71,6 +74,7 @@ const Home = () => {
 			getWeatherData({ city: debouncedValue }).then((res) => {
 				setWeather(res);
 				setLoading(false);
+				res.error ? setErrorMsg(res.error) : setErrorMsg("");
 			});
 		}
 	}, [debouncedValue]);
@@ -82,6 +86,7 @@ const Home = () => {
 				<link rel="icon" href="/logo.png" />
 			</Head>
 			<main>
+				{errorMsg ? <Toast msg={errorMsg} /> : <></>}
 				<div className="mainPage">
 					<div className="overlay"></div>
 					<Image

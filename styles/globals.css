@@ -19,6 +19,22 @@ to {
   transform: rotate(360deg);
 }
 }
+.toastContainer{
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  height: 50px;
+  min-width: 300px;
+  z-index: 4;
+  text-align: left;
+  border-radius: 8px;
+  padding: 10px;
+  color: #FFF;
+  text-transform: capitalize;
+  font-weight: 500;
+  font-size: 16px;
+  transition: all 1s ease-in-out;
+}
 
 .mainPage{
   height: 100%;
@@ -155,3 +171,4 @@ to {
   display: flex;
   align-items: center;
 }
+
